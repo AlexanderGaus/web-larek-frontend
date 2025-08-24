@@ -58,13 +58,25 @@ export class Card extends Component<IProduct> {
 		}
 		return super.render(data);
 	}
-
-	updateAddButtonState(isInBasket: boolean) {
-		if (this.addButton) {
-			this.addButton.disabled = isInBasket;
-			console.log(`Кнопка ${isInBasket ? 'заблокирована' : 'разблокирована'}`);
-		}
-	}
+    
+    updateAddButtonState(isInBasket: boolean) {
+        if (this.addButton) {
+            if (isInBasket) {
+                this.addButton.textContent = 'Удалить';
+                this.addButton.classList.add('button_remove');
+                this.addButton.onclick = () => {
+                    this.events.emit('card:delete', { card: this });
+                };
+            } else {
+                this.addButton.textContent = 'В корзину';
+                this.addButton.classList.remove('button_remove');
+                this.addButton.onclick = () => {
+                    this.events.emit('card:add', { card: this });
+                };
+            }
+        }
+    }
+    
 
 	set index(value: number) {
 		if (this.indexElement) {
